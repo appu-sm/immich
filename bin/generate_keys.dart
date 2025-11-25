@@ -6,7 +6,7 @@ import 'dart:io';
 const _kReservedWords = ['continue'];
 
 void main() async {
-  final sourceFile = File('../i18n/en.json');
+  final sourceFile = File('assets/i18n/en.json');
   if (!await sourceFile.exists()) {
     stderr.writeln('Source file does not exist');
     return;
@@ -36,11 +36,7 @@ abstract class IntlKeys {
   await output.writeAsString(buffer.toString());
 }
 
-void _writeKeys(
-  StringBuffer buffer,
-  Map<String, dynamic> map, [
-  String prefix = '',
-]) {
+void _writeKeys(StringBuffer buffer, Map<String, dynamic> map, [String prefix = '']) {
   for (final entry in map.entries) {
     final key = entry.key;
     final value = entry.value;
