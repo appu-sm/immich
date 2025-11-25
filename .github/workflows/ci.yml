@@ -1,0 +1,100 @@
+name: Release Apk arm64
+on:
+  push:
+    branches:
+      - main
+env:
+  FLUTTER_VERSION: "3.35.7"
+  APK_BUILD_DIR: "/tmp"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(sed -n 's/^version: \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' pubspec.yaml)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Copy files to env.APK_BUILD_DIR
+        run: |
+          mkdir -p $APK_BUILD_DIR
+          cp -r . $APK_BUILD_DIR
+
+      - name: Decode android-keystore file
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
+        run: echo "${{ secrets.KEYSTORE_FILE_BASE64 }}" | base64 -di > ${{ env.APK_BUILD_DIR }}/key.jks
+
+      - name: Create key.properties file
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        env:
+          KEYSTORE_PROPERTIES_PATH: android/key.properties
+        run: |
+          echo 'storePassword=${{ secrets.KEYSTORE_PASSWORD }}' > $KEYSTORE_PROPERTIES_PATH
+          echo 'keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}' >> $KEYSTORE_PROPERTIES_PATH
+          echo 'keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}' >> $KEYSTORE_PROPERTIES_PATH
+          echo 'storeFile=${{ env.APK_BUILD_DIR }}/key.jks' >> $KEYSTORE_PROPERTIES_PATH
+
+      - name: Set up JDK 18
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '18.x'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Install Dependencies
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        run: flutter pub get
+
+      - name: Build APK
+        working-directory: ${{ env.APK_BUILD_DIR }}
+        run: flutter build apk --target-platform android-arm64 --obfuscate --split-per-abi --release --no-tree-shake-icons --split-debug-info=build/app/outputs/symbols
+
+      - name: Rename build file
+        run: mv ${{ env.APK_BUILD_DIR }}/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ${{ env.APK_BUILD_DIR }}/build/app/outputs/flutter-apk/Immich-personal.${{ steps.get_version.outputs.version }}.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-result
+          path: ${{ env.APK_BUILD_DIR }}/build/app/outputs/flutter-apk/Immich-personal.${{ steps.get_version.outputs.version }}.apk
+
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+           generate_release_notes: true
+           prerelease: false
+           tag_name: ${{ steps.get_version.outputs.version }}
+           files: |
+             ${{ env.APK_BUILD_DIR }}/build/app/outputs/flutter-apk/Immich-personal.${{ steps.get_version.outputs.version }}.apk
+
+  notification:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send telegram notification
+        uses: cbrgm/telegram-github-action@v1
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          to: ${{ secrets.TELEGRAM_BOT_ID }}
+          parse-mode: html
+          disable-web-page-preview: true
+          message: |
+            🚀 New Release Published!
+             For repo <b><a href="https://github.com/${{ github.repository }}">${{ github.repository }}</a></b> version <i><b>${{ needs.release.outputs.version }}</b></i>
+             
+             ${{ github.event.head_commit.message }}
+
+             <i>Download the file <b><a href="https://github.com/${{ github.repository }}/releases/download/${{ needs.release.outputs.version }}/Immich-personal.${{ needs.release.outputs.version }}.apk">Immich-personal.${{ needs.release.outputs.version }}.apk</a></b></i>
