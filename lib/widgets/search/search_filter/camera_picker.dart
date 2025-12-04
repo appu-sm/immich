@@ -25,10 +25,10 @@ class CameraPicker extends HookConsumerWidget {
 
     final models = ref.watch(getSearchSuggestionsProvider(SearchSuggestionType.cameraModel, make: selectedMake.value));
 
-    final makeWidget = SearchDropdown(
+    final makeWidget = SearchDropdown<String>(
       dropdownMenuEntries: switch (make) {
         AsyncError() => [],
-        AsyncData(:final value) => value.map((e) => DropdownMenuEntry(value: e, label: e)).toList(),
+        AsyncData(:final value) => value.map((e) => DropdownMenuEntry<String>(value: e, label: e)).toList(),
         _ => [],
       },
       label: const Text('make').tr(),
@@ -44,10 +44,10 @@ class CameraPicker extends HookConsumerWidget {
       },
     );
 
-    final modelWidget = SearchDropdown(
+    final modelWidget = SearchDropdown<String>(
       dropdownMenuEntries: switch (models) {
         AsyncError() => [],
-        AsyncData(:final value) => value.map((e) => DropdownMenuEntry(value: e, label: e)).toList(),
+        AsyncData(:final value) => value.map((e) => DropdownMenuEntry<String>(value: e, label: e)).toList(),
         _ => [],
       },
       label: const Text('model').tr(),

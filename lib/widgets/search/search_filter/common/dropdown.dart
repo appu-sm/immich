@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SearchDropdown<T> extends StatelessWidget {
+class SearchDropdown<T extends Object> extends StatelessWidget {
   const SearchDropdown({
     super.key,
     required this.dropdownMenuEntries,

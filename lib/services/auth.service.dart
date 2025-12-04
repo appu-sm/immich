@@ -160,6 +160,36 @@ class AuthService {
 
     if (wifiName == savedWifiName) {
       endpoint = await _setLocalConnection();
+    } else {
+      final localIp = await _authRepository.getLocalEndpoint();
+      final wifiIP = await _networkService.getWifiIp();
+
+      // Extract IP address from localIp URL to compare with wifiIP
+      String? localIpAddress;
+      if (localIp != null) {
+        try {
+          final uri = Uri.parse(localIp);
+          localIpAddress = uri.host;
+          _log.info("Extracted local IP: $localIpAddress");
+        } catch (e) {
+          _log.warning("Failed to parse local IP URL: $e");
+        }
+      }
+
+      // Check if WiFi IP matches local IP (compare first 3 parts of IP: xxx.xxx.xxx)
+      bool isOnLocalNetwork = false;
+      if (localIpAddress != null && wifiIP != null) {
+        final localParts = localIpAddress.split('.');
+        final wifiParts = wifiIP.split('.');
+
+        if (localParts.length >= 3 && wifiParts.length >= 3) {
+          isOnLocalNetwork =
+              localParts[0] == wifiParts[0] && localParts[1] == wifiParts[1] && localParts[2] == wifiParts[2];
+        }
+      }
+      if (isOnLocalNetwork) {
+        endpoint = await _setLocalConnection();
+      }
     }
 
     endpoint ??= await _setRemoteConnection();

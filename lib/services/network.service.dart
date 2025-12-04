@@ -32,6 +32,10 @@ class NetworkService {
     return await _repository.getWifiName();
   }
 
+  Future<String?> getWifiIp() async {
+    return await _repository.getWifiIp();
+  }
+
   Future<bool> openSettings() {
     return _permissionRepository.openSettings();
   }
