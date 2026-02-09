@@ -150,7 +150,7 @@ hide = true
 sources = ["i18n/"]
 outputs = "lib/generated/codegen_loader.g.dart"
 run = [
-  "dart run easy_localization:generate -S assets/i18n",
+  "dart run easy_localization:generate -S ../i18n",
   "dart format lib/generated/codegen_loader.g.dart",
 ]
 

@@ -131,10 +131,10 @@ class QuickDatePicker extends HookWidget {
         const Text("in_year_selector").tr(),
         const SizedBox(width: 15),
         Expanded(
-          child: DropdownMenu<int>(
+          child: DropdownMenu(
             initialSelection: _initialYear,
             menuStyle: MenuStyle(maximumSize: WidgetStateProperty.all(Size(size.width, size.height * 0.5))),
-            dropdownMenuEntries: _recentYears.map((e) => DropdownMenuEntry<int>(value: e, label: e.toString())).toList(),
+            dropdownMenuEntries: _recentYears.map((e) => DropdownMenuEntry(value: e, label: e.toString())).toList(),
             onSelected: (year) {
               if (year == null) return;
               onSelect(YearFilter(year));

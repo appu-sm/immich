@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
   compileSdkVersion 35
-  ndkVersion = "28.2.13676358"
+  ndkVersion = "28.1.13356709"
 
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_17
@@ -61,9 +61,9 @@ android {
 
   signingConfigs {
     release {
-      def keyAliasVal = 'ASInfoTech' //System.getenv("ALIAS")
-      def keyPasswordVal = '4amaNand1n!' //System.getenv("ANDROID_KEY_PASSWORD")
-      def storePasswordVal = '4amaNand1n!' //System.getenv("ANDROID_STORE_PASSWORD")
+      def keyAliasVal = System.getenv("ALIAS")
+      def keyPasswordVal = System.getenv("ANDROID_KEY_PASSWORD")
+      def storePasswordVal = System.getenv("ANDROID_STORE_PASSWORD")
 
       keyAlias keyAliasVal ? keyAliasVal : keystoreProperties['keyAlias']
       keyPassword keyPasswordVal ? keyPasswordVal : keystoreProperties['keyPassword']

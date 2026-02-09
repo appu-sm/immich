@@ -19,24 +19,24 @@ class MapTimeDropDown extends StatelessWidget {
           child: Text("date_range".tr(), style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
         LayoutBuilder(
-          builder: (_, constraints) => DropdownMenu<int>(
+          builder: (_, constraints) => DropdownMenu(
             width: constraints.maxWidth * 0.9,
             enableSearch: false,
             enableFilter: false,
             initialSelection: relativeTime,
             onSelected: (value) => onTimeChange(value!),
             dropdownMenuEntries: [
-              DropdownMenuEntry<int>(value: 0, label: "all".tr()),
-              DropdownMenuEntry<int>(value: 1, label: "map_settings_date_range_option_day".tr()),
-              DropdownMenuEntry<int>(value: 7, label: "map_settings_date_range_option_days".tr(namedArgs: {'days': "7"})),
-              DropdownMenuEntry<int>(value: 30, label: "map_settings_date_range_option_days".tr(namedArgs: {'days': "30"})),
-              DropdownMenuEntry<int>(
+              DropdownMenuEntry(value: 0, label: "all".tr()),
+              DropdownMenuEntry(value: 1, label: "map_settings_date_range_option_day".tr()),
+              DropdownMenuEntry(value: 7, label: "map_settings_date_range_option_days".tr(namedArgs: {'days': "7"})),
+              DropdownMenuEntry(value: 30, label: "map_settings_date_range_option_days".tr(namedArgs: {'days': "30"})),
+              DropdownMenuEntry(
                 value: now
                     .difference(DateTime(now.year - 1, now.month, now.day, now.hour, now.minute, now.second))
                     .inDays,
                 label: "map_settings_date_range_option_year".tr(),
               ),
-              DropdownMenuEntry<int>(
+              DropdownMenuEntry(
                 value: now
                     .difference(DateTime(now.year - 3, now.month, now.day, now.hour, now.minute, now.second))
                     .inDays,

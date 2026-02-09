@@ -49,10 +49,10 @@ class LocationPicker extends HookConsumerWidget {
 
     return Column(
       children: [
-        SearchDropdown<String>(
+        SearchDropdown(
           dropdownMenuEntries: switch (countries) {
             AsyncError() => [],
-            AsyncData(:final value) => value.map((e) => DropdownMenuEntry<String>(value: e, label: e)).toList(),
+            AsyncData(:final value) => value.map((e) => DropdownMenuEntry(value: e, label: e)).toList(),
             _ => [],
           },
           label: const Text('country').tr(),
@@ -68,10 +68,10 @@ class LocationPicker extends HookConsumerWidget {
           },
         ),
         const SizedBox(height: 16),
-        SearchDropdown<String>(
+        SearchDropdown(
           dropdownMenuEntries: switch (states) {
             AsyncError() => [],
-            AsyncData(:final value) => value.map((e) => DropdownMenuEntry<String>(value: e, label: e)).toList(),
+            AsyncData(:final value) => value.map((e) => DropdownMenuEntry(value: e, label: e)).toList(),
             _ => [],
           },
           label: const Text('state').tr(),
@@ -86,10 +86,10 @@ class LocationPicker extends HookConsumerWidget {
           },
         ),
         const SizedBox(height: 16),
-        SearchDropdown<String>(
+        SearchDropdown(
           dropdownMenuEntries: switch (cities) {
             AsyncError() => [],
-            AsyncData(:final value) => value.map((e) => DropdownMenuEntry<String>(value: e, label: e)).toList(),
+            AsyncData(:final value) => value.map((e) => DropdownMenuEntry(value: e, label: e)).toList(),
             _ => [],
           },
           label: const Text('city').tr(),

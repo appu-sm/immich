@@ -158,7 +158,7 @@ class SharedLinkEditPage extends HookConsumerWidget {
     }
 
     Widget buildExpiryAfterButton() {
-      return DropdownMenu<int>(
+      return DropdownMenu(
         label: Text(
           "expire_after",
           style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.primary),
@@ -172,30 +172,30 @@ class SharedLinkEditPage extends HookConsumerWidget {
           expiryAfter.value = value!;
         },
         dropdownMenuEntries: [
-          DropdownMenuEntry<int>(value: 0, label: "never".tr()),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(value: 0, label: "never".tr()),
+          DropdownMenuEntry(
             value: 30,
             label: "shared_link_edit_expire_after_option_minutes".tr(namedArgs: {'count': "30"}),
           ),
-          DropdownMenuEntry<int>(value: 60, label: "shared_link_edit_expire_after_option_hour".tr()),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(value: 60, label: "shared_link_edit_expire_after_option_hour".tr()),
+          DropdownMenuEntry(
             value: 60 * 6,
             label: "shared_link_edit_expire_after_option_hours".tr(namedArgs: {'count': "6"}),
           ),
-          DropdownMenuEntry<int>(value: 60 * 24, label: "shared_link_edit_expire_after_option_day".tr()),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(value: 60 * 24, label: "shared_link_edit_expire_after_option_day".tr()),
+          DropdownMenuEntry(
             value: 60 * 24 * 7,
             label: "shared_link_edit_expire_after_option_days".tr(namedArgs: {'count': "7"}),
           ),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(
             value: 60 * 24 * 30,
             label: "shared_link_edit_expire_after_option_days".tr(namedArgs: {'count': "30"}),
           ),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(
             value: 60 * 24 * 30 * 3,
             label: "shared_link_edit_expire_after_option_months".tr(namedArgs: {'count': "3"}),
           ),
-          DropdownMenuEntry<int>(
+          DropdownMenuEntry(
             value: 60 * 24 * 30 * 12,
             label: "shared_link_edit_expire_after_option_year".tr(namedArgs: {'count': "1"}),
           ),
